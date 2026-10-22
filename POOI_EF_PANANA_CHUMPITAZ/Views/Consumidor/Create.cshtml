@@ -1,0 +1,132 @@
+﻿@model POOI_EF_PANANA_CHUMPITAZ.Models.Consumidor
+
+@{
+    ViewBag.Title = "Nuevo consumidor";
+}
+
+<div class="mb-4">
+    @Html.ActionLink("← Volver a consumidores", "Index", null,
+        new { @class = "text-decoration-none" })
+
+    <h2 class="mt-3 mb-2">Nuevo consumidor</h2>
+    <p class="text-muted">
+        Completa los datos para registrar un consumidor.
+        Los campos con * son obligatorios.
+    </p>
+</div>
+
+@using (Html.BeginForm("Create", "Consumidor", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "",
+        new { @class = "text-danger", role = "alert" })
+
+    <div class="border rounded-3 p-4 mb-4">
+        <h3 class="h5 mb-1">Datos personales</h3>
+        <p class="text-muted small mb-4">
+            Identificación y nombres del consumidor.
+        </p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="dnicont">DNI *</label>
+                    @Html.TextBoxFor(m => m.dnicont,
+                        new
+                             {
+                            @class = "form-control",
+                            maxlength = "8",
+                            inputmode = "numeric",
+                            placeholder = "Ej. 12345678"
+                        })
+                    @Html.ValidationMessageFor(m => m.dnicont, "",
+                        new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="nomcont">Nombres *</label>
+                    @Html.TextBoxFor(m => m.nomcont,
+                        new
+                             {
+                            @class = "form-control",
+                            maxlength = "40",
+                            placeholder = "Ingrese los nombres"
+                        })
+                    @Html.ValidationMessageFor(m => m.nomcont, "",
+                        new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="apecont">Apellidos *</label>
+                    @Html.TextBoxFor(m => m.apecont,
+                        new
+                             {
+                            @class = "form-control",
+                            maxlength = "40",
+                            placeholder = "Ingrese los apellidos"
+                        })
+                    @Html.ValidationMessageFor(m => m.apecont, "",
+                        new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border rounded-3 p-4 mb-4">
+        <h3 class="h5 mb-1">Contacto y ubicación</h3>
+        <p class="text-muted small mb-4">
+            Correo electrónico y país del consumidor.
+        </p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.emailcont)
+                    @Html.TextBoxFor(m => m.emailcont,
+                        new
+                             {
+                            @class = "form-control",
+                            type = "email",
+                            maxlength = "250",
+                            placeholder = "nombre@ejemplo.com"
+                        })
+                    @Html.ValidationMessageFor(m => m.emailcont, "",
+                        new { @class = "text-danger" })
+                    <small class="text-muted">Opcional.</small>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="idpais">País *</label>
+                    @Html.DropDownListFor(m => m.idpais,
+                        (System.Web.Mvc.SelectList)ViewBag.Paises,
+                        "-- Seleccione un país --",
+                        new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.idpais, "",
+                        new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-end border-top pt-4">
+        @Html.ActionLink("Cancelar", "Index", null,
+            new { @class = "btn btn-default" })
+
+        <button type="submit" class="btn btn-primary">
+            Registrar consumidor
+        </button>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,319 @@
+﻿@model IEnumerable<POOI_EF_PANANA_CHUMPITAZ.Models.Consumidor>
+
+@{
+    ViewBag.Title = "Consumidores";
+    var consumidores = System.Linq.Enumerable.ToList(Model);
+}
+
+<style>
+    .page-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 26px;
+    }
+
+        .page-heading h2 {
+            margin-bottom: 6px;
+        }
+
+    .page-description {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .list-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 18px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+    }
+
+    .record-count {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .count-number {
+        min-width: 44px;
+        height: 44px;
+        padding: 0 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: #dbeafe;
+        color: #1e40af;
+        font-size: 21px;
+        font-weight: 750;
+    }
+
+    .count-label {
+        color: #475569;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .search-box {
+        width: 100%;
+        max-width: 350px;
+    }
+
+        .search-box label {
+            display: block;
+            margin-bottom: 5px;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+    .consumer-table {
+        min-width: 860px;
+    }
+
+        .consumer-table .dni-cell {
+            color: #16324f;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+    .country-badge {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 6px;
+        background: #eef2ff;
+        color: #4338ca;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .row-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+        .row-actions form {
+            margin: 0;
+        }
+
+    .empty-state {
+        padding: 48px 20px;
+        text-align: center;
+    }
+
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: #16324f;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            margin-bottom: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+    .list-footer {
+        margin-top: 16px;
+        color: #64748b;
+        font-size: 13px;
+    }
+</style>
+
+<div class="page-heading">
+    <div>
+        <h2>Consumidores</h2>
+        <p class="page-description">
+            Consulta y administra la información de tus consumidores.
+        </p>
+    </div>
+
+    @Html.ActionLink(
+        "+ Nuevo consumidor",
+        "Create",
+        null,
+        new { @class = "btn btn-primary" })
+</div>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-info" role="status">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<div class="list-toolbar">
+    <div class="record-count">
+        <span class="count-number">@consumidores.Count</span>
+        <span class="count-label">Consumidores registrados</span>
+    </div>
+
+    @if (consumidores.Count > 0)
+    {
+        <div class="search-box">
+            <label for="buscarConsumidor">Buscar consumidor</label>
+            <input type="search"
+                   id="buscarConsumidor"
+                   class="form-control"
+                   placeholder="DNI, nombre, apellido o correo"
+                   aria-controls="tablaConsumidores" />
+        </div>
+    }
+</div>
+
+@if (consumidores.Count == 0)
+{
+    <div class="empty-state">
+        <h3>No hay registros</h3>
+        <p>Agrega un consumidor para comenzar.</p>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped consumer-table"
+               id="tablaConsumidores">
+            <thead>
+                <tr>
+                    <th scope="col">DNI</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Correo electrónico</th>
+                    <th scope="col">País</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in consumidores)
+                {
+                    <tr class="consumer-row">
+                        <td class="dni-cell">@item.dnicont</td>
+                        <td>@item.nomcont</td>
+                        <td>@item.apecont</td>
+                        <td>
+                            @if (string.IsNullOrWhiteSpace(item.emailcont))
+                            {
+                                <span class="text-muted">Sin correo</span>
+                            }
+                            else
+                            {
+                                @item.emailcont
+                            }
+                        </td>
+                        <td>
+                            <span class="country-badge">@item.idpais</span>
+                        </td>
+                        <td>
+                            <div class="row-actions">
+                                @Html.ActionLink(
+                                    "Editar",
+                                    "Update",
+                                    new { id = item.dnicont },
+                                    new { @class = "btn btn-warning btn-sm" })
+
+                                @Html.ActionLink(
+                                    "Detalles",
+                                    "Details",
+                                    new { id = item.dnicont },
+                                    new { @class = "btn btn-info btn-sm" })
+
+                                @using (Html.BeginForm(
+                                    "Delete",
+                                    "Consumidor",
+                                    FormMethod.Post,
+                                    new
+                                    {
+                                        onsubmit = "return confirm('¿Desea eliminar este consumidor? Esta acción no se puede deshacer.');"
+                                    }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", item.dnicont)
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm">
+                                        Eliminar
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="sinCoincidencias" class="empty-state" hidden>
+        <h3>Sin coincidencias</h3>
+        <p>Prueba con otro DNI, nombre, apellido o correo.</p>
+    </div>
+
+    <p class="list-footer" id="resultadoBusqueda" role="status">
+        Mostrando @consumidores.Count de @consumidores.Count consumidores.
+    </p>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            var buscador = document.getElementById("buscarConsumidor");
+
+            if (!buscador) {
+                return;
+            }
+
+            var filas = document.querySelectorAll(".consumer-row");
+            var sinCoincidencias =
+                document.getElementById("sinCoincidencias");
+            var resultado =
+                document.getElementById("resultadoBusqueda");
+
+            function normalizar(texto) {
+                return texto
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase();
+            }
+
+            buscador.addEventListener("input", function () {
+                var busqueda = normalizar(buscador.value.trim());
+                var visibles = 0;
+
+                filas.forEach(function (fila) {
+                    var datos = Array.from(fila.cells)
+                        .slice(0, 5)
+                        .map(function (celda) {
+                            return celda.textContent.trim();
+                        })
+                        .join(" ");
+
+                    var coincide =
+                        normalizar(datos).includes(busqueda);
+
+                    fila.hidden = !coincide;
+
+                    if (coincide) {
+                        visibles++;
+                    }
+                });
+
+                sinCoincidencias.hidden = visibles !== 0;
+
+                resultado.textContent =
+                    "Mostrando " + visibles + " de " +
+                    filas.length + " consumidores.";
+            });
+        })();
+    </script>
+}

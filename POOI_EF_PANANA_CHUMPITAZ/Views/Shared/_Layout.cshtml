@@ -1,0 +1,418 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewBag.Title - Gestión de consumidores</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        :root {
+            --principal: #16324f;
+            --principal-oscuro: #10253b;
+            --acento: #2563eb;
+            --fondo: #f3f6fb;
+            --texto: #243247;
+            --secundario: #64748b;
+            --borde: #e2e8f0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--fondo);
+            color: var(--texto);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .app-navbar {
+            background: var(--principal);
+            padding: 16px 0;
+            box-shadow: 0 4px 16px rgba(16, 37, 59, 0.12);
+        }
+
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+            .brand-link:hover {
+                color: #fff;
+            }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.13);
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .brand-title {
+            display: block;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 2px;
+            color: #c0d0e1;
+            font-size: 12px;
+        }
+
+        .app-navbar .nav-link {
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+            .app-navbar .nav-link:hover {
+                color: #fff;
+                background: rgba(255, 255, 255, 0.18);
+            }
+
+        .app-main {
+            flex: 1;
+            width: 100%;
+            padding-top: 36px;
+            padding-bottom: 40px;
+        }
+
+        .workspace-label {
+            margin-bottom: 12px;
+            color: var(--secundario);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .content-panel {
+            padding: 30px;
+            border: 1px solid var(--borde);
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 8px 30px rgba(22, 50, 79, 0.05);
+        }
+
+        h2 {
+            margin-bottom: 24px;
+            color: var(--principal);
+            font-size: 27px;
+            font-weight: 750;
+            letter-spacing: -0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                margin-bottom: 8px;
+                color: var(--texto);
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+        .form-control,
+        .form-select {
+            width: 100%;
+            max-width: none;
+            min-height: 44px;
+            padding: 10px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            color: var(--texto);
+            background-color: #fff;
+            font-size: 14px;
+        }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: var(--acento);
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            }
+
+            .form-control[readonly] {
+                background: #f1f5f9;
+                color: var(--secundario);
+            }
+
+        .btn {
+            padding: 10px 17px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.15s, box-shadow 0.15s;
+        }
+
+        .btn-sm {
+            padding: 7px 11px;
+            font-size: 12px;
+        }
+
+        .btn-primary {
+            border-color: var(--acento);
+            background: var(--acento);
+        }
+
+            .btn-primary:hover {
+                border-color: #1d4ed8;
+                background: #1d4ed8;
+            }
+
+        .btn-success {
+            border-color: #15803d;
+            background: #15803d;
+        }
+
+            .btn-success:hover {
+                border-color: #166534;
+                background: #166534;
+            }
+
+        .btn-warning {
+            border-color: #fef3c7;
+            background: #fef3c7;
+            color: #854d0e;
+        }
+
+            .btn-warning:hover {
+                border-color: #fde68a;
+                background: #fde68a;
+                color: #713f12;
+            }
+
+        .btn-info {
+            border-color: #dbeafe;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+            .btn-info:hover {
+                border-color: #bfdbfe;
+                background: #bfdbfe;
+                color: #1e3a8a;
+            }
+
+        .btn-danger {
+            border-color: #fee2e2;
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+            .btn-danger:hover {
+                border-color: #fecaca;
+                background: #fecaca;
+                color: #991b1b;
+            }
+
+        .btn-default {
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+        }
+
+            .btn-default:hover {
+                border-color: #94a3b8;
+                background: #f1f5f9;
+                color: var(--principal);
+            }
+
+        .table {
+            margin-top: 22px;
+            margin-bottom: 0;
+            border-color: var(--borde);
+            font-size: 14px;
+        }
+
+            .table > thead > tr > th {
+                padding: 15px;
+                border-bottom: 1px solid var(--borde);
+                background: #f8fafc;
+                color: #475569;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 0.4px;
+                text-transform: uppercase;
+            }
+
+            .table > tbody > tr > td,
+            .table > tbody > tr > th {
+                padding: 15px;
+                vertical-align: middle;
+                overflow-wrap: anywhere;
+            }
+
+        .table-striped > tbody > tr:nth-of-type(odd) > * {
+            --bs-table-accent-bg: #f8fafc;
+            --bs-table-striped-bg: #f8fafc;
+        }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .alert-info {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .validation-summary-errors {
+            margin-bottom: 22px;
+            padding: 14px 18px;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            background: #fff1f2;
+        }
+
+            .validation-summary-errors ul {
+                margin-bottom: 0;
+                padding-left: 18px;
+            }
+
+        .field-validation-error {
+            display: block;
+            margin-top: 6px;
+            font-size: 13px;
+        }
+
+        .input-validation-error {
+            border-color: #dc2626;
+        }
+
+        .app-footer {
+            padding: 22px 0;
+            border-top: 1px solid var(--borde);
+            background: #fff;
+            color: var(--secundario);
+            font-size: 13px;
+        }
+
+        .footer-author {
+            color: var(--principal);
+            font-weight: 600;
+        }
+
+        @@media (max-width: 767px) {
+            .app-main {
+                padding-top: 22px;
+                padding-bottom: 24px;
+            }
+
+            .content-panel {
+                padding: 20px 16px;
+                border-radius: 12px;
+            }
+
+            h2 {
+                font-size: 23px;
+            }
+
+            .brand-title {
+                font-size: 15px;
+            }
+
+            .table > tbody > tr > td,
+            .table > thead > tr > th {
+                padding: 10px;
+            }
+
+            .app-footer .container {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark app-navbar">
+            <div class="container">
+                <a class="brand-link"
+                   href="@Url.Action("Index", "Consumidor")">
+                    <span class="brand-mark" aria-hidden="true">GC</span>
+                    <span>
+                        <span class="brand-title">
+                            Gestión de consumidores
+                        </span>
+                        <span class="brand-subtitle">
+                            Registro y administración
+                        </span>
+                    </span>
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#menuPrincipal"
+                        aria-controls="menuPrincipal"
+                        aria-expanded="false"
+                        aria-label="Mostrar navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end"
+                     id="menuPrincipal">
+                    <ul class="navbar-nav mt-3 mt-sm-0">
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Consumidores",
+                                "Index",
+                                "Consumidor",
+                                new { area = "" },
+                                new { @class = "nav-link" })
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container app-main">
+        <div class="workspace-label">Panel de administración</div>
+
+        <div class="content-panel">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container d-flex flex-column flex-md-row
+                    justify-content-between">
+            <span class="footer-author">
+                Juan David Panana Chumpitaz
+            </span>
+
+            <span>
+                Programación Orientada a Objetos I · @DateTime.Now.Year
+            </span>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

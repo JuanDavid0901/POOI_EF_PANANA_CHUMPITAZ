@@ -1,0 +1,84 @@
+﻿@model POOI_EF_PANANA_CHUMPITAZ.Models.Consumidor
+
+@{
+    ViewBag.Title = "Detalles del consumidor";
+
+    var inicial = string.IsNullOrWhiteSpace(Model.nomcont)
+        ? "C"
+        : Model.nomcont.Trim().Substring(0, 1).ToUpper();
+
+    var paises = new System.Collections.Generic.Dictionary<string, string>
+{
+        { "PER", "Perú" },
+        { "ARG", "Argentina" },
+        { "CHL", "Chile" },
+        { "COL", "Colombia" },
+        { "ECU", "Ecuador" }
+    };
+
+    var codigoPais = (Model.idpais ?? "").Trim();
+    var nombrePais = paises.ContainsKey(codigoPais)
+        ? paises[codigoPais]
+        : codigoPais;
+}
+
+@Html.ActionLink("← Volver a consumidores", "Index", null,
+    new { @class = "text-decoration-none" })
+
+<h2 class="mt-3 mb-2">Ficha del consumidor</h2>
+<p class="text-muted mb-4">
+    Información personal, contacto y ubicación.
+</p>
+
+<div class="border rounded-3 overflow-hidden mb-4">
+    <div class="p-4 d-flex align-items-center gap-3"
+         style="background: #f1f5fb;">
+        <div aria-hidden="true"
+             style="width: 64px; height: 64px; flex-shrink: 0;
+                    display: flex; align-items: center;
+                    justify-content: center; border-radius: 16px;
+                    background: #16324f; color: white;
+                    font-size: 28px; font-weight: 700;">
+            @inicial
+        </div>
+
+        <div>
+            <h3 class="h4 mb-1">
+                @Model.nomcont @Model.apecont
+            </h3>
+            <span class="text-muted">DNI: @Model.dnicont</span>
+        </div>
+    </div>
+
+    <div class="p-4">
+        <dl class="row mb-0">
+            <dt class="col-md-3 mb-2">DNI</dt>
+            <dd class="col-md-9 mb-4">@Model.dnicont</dd>
+
+            <dt class="col-md-3 mb-2">Nombres</dt>
+            <dd class="col-md-9 mb-4">@Model.nomcont</dd>
+
+            <dt class="col-md-3 mb-2">Apellidos</dt>
+            <dd class="col-md-9 mb-4">@Model.apecont</dd>
+
+            <dt class="col-md-3 mb-2">Correo electrónico</dt>
+            <dd class="col-md-9 mb-4 text-break">
+                @(string.IsNullOrWhiteSpace(Model.emailcont)
+                    ? "Sin correo registrado"
+                    : Model.emailcont)
+            </dd>
+
+            <dt class="col-md-3 mb-2">País</dt>
+            <dd class="col-md-9 mb-0">@nombrePais</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap gap-2 justify-content-end">
+    @Html.ActionLink("Volver al listado", "Index", null,
+        new { @class = "btn btn-default" })
+
+    @Html.ActionLink("Editar consumidor", "Update",
+        new { id = Model.dnicont },
+        new { @class = "btn btn-primary" })
+    }
